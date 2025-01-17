@@ -1,78 +1,71 @@
-# TextPairer
+# Pair Text Files with DeepL API Translation
 
-**TextPairer** is a utility designed to pair corresponding paragraphs and sentences from two text files. It ensures that the paired content is aligned correctly, making it suitable for scenarios such as bilingual text alignment, subtitle synchronization, or other comparative text analysis tasks.
+This script pairs sentences from a text file (`file1.txt`) with their translated versions using the DeepL API. The translation process uses an external API key stored in a configuration file for enhanced security.
 
 ## Features
-- Reads two text files and aligns their content.
-- Supports pairing paragraphs and sentences with validation.
-- Provides detailed error messages when alignment issues are detected.
-- Saves the paired output to a new file for easy reference.
+- Splits text into sentences while preserving dots inside quotes and at the end of sentences.
+- Uses the DeepL API to translate sentences from the source language to the target language.
+- Pairs original and translated sentences for easy review and saving.
 
-## Prerequisites
-- Python 3.7 or higher
+## Requirements
+- Python 3.8 or higher
+- DeepL Python SDK
 
 ## Installation
-Clone the repository and navigate to the project directory:
-```bash
-$ git clone <repository_url>
-$ cd TextPairer
-```
+1. Clone this repository:
+   ```bash
+   git clone <repository-url>
+   cd <repository-folder>
+   ```
+2. Install the required dependencies:
+   ```bash
+   pip install deepl
+   ```
+
+## Configuration
+1. Create a `config.json` file in the project root directory with the following content:
+   ```json
+   {
+       "deepl_api_key": "your_deepl_api_key_here"
+   }
+   ```
+   Replace `your_deepl_api_key_here` with your actual DeepL API key.
+
+2. Add `config.json` to your `.gitignore` file to prevent it from being tracked by Git:
+   ```
+   config.json
+   ```
 
 ## Usage
-Prepare two text files for pairing, ensuring the content in each file corresponds logically:
-- `file1.txt` (e.g., a source language or reference text)
-- `file2.txt` (e.g., a target language or comparative text)
+1. Place the source text file (`file1.txt`) in the project directory.
+2. Run the script:
+   ```bash
+   python <script-name>.py
+   ```
+3. Review the extracted sentences and their translations.
+4. The paired output will be saved to `paired_output.txt`.
 
-### Example
-```python
-from text_pairer import pair_texts
-
-file1 = 'file1.txt'
-file2 = 'file2.txt'
-
-try:
-    paired_output = pair_texts(file1, file2)
-    print(paired_output)
-
-    # Save to file
-    with open('paired_output.txt', 'w', encoding='utf-8') as output_file:
-        output_file.write(paired_output)
-except ValueError as e:
-    print(f"Error: {e}")
+## Example
+### Input: `file1.txt`
+```
+1. Nietzsche and Dostoevsky had deep insights into human nature.
+"Art is the lie that enables us to realize the truth," said Picasso.
 ```
 
-### Command-line Example
-```bash
-$ python text_pairer.py file1.txt file2.txt
+### Output: `paired_output.txt`
 ```
-This will process the two input files and generate `paired_output.txt` in the current directory.
+1. Nietzsche and Dostoevsky had deep insights into human nature.
+니체와 도스토옙스키는 인간 본성에 대한 깊은 통찰을 가지고 있었습니다.
 
-## Functionality
-### `pair_texts(file1, file2)`
-- **Input:** Two text files containing paragraphs separated by double newlines (`\n\n`) and sentences separated by single newlines (`\n`).
-- **Output:** A string where each paragraph and its corresponding sentences are paired.
+"Art is the lie that enables us to realize the truth," said Picasso.
+"예술은 진실을 깨닫게 해주는 거짓말입니다,"라고 피카소는 말했습니다.
 
-### Error Handling
-- Ensures the number of paragraphs in both files match.
-- Validates the number of sentences within each paired paragraph.
-- Provides detailed error messages if mismatches occur.
-
-## Output Format
-The output file will contain aligned text in the following format:
-```
-Sentence from file1
-Sentence from file2
-
-[Blank line separating paragraphs]
 ```
 
-## Contributing
-Contributions are welcome! Please fork the repository, make changes, and submit a pull request.
+## Error Handling
+- If the API key is missing or invalid, a `ValueError` is raised.
+- Sentences that fail to translate will display `[Translation Error]`.
 
 ## License
-This project is licensed under the MIT License. See the LICENSE file for details.
-
----
-
-For additional questions or issues, feel free to open an issue in the repository.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
 
